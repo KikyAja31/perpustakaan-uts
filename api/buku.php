@@ -50,3 +50,20 @@ if (isset($_GET['id'])) {
 }
 
 $result = $mysqli->query("SELECT id_buku, judul, tahun_terbit, cover_buku FROM buku ORDER BY id_buku DESC");
+
+
+if (!$result) {
+    response("error", "Query Error: " . $mysqli->error);
+}
+
+$buku_list = [];
+while ($row = $result->fetch_assoc()) {
+    $buku_list[] = [
+        "id_buku" => $row['id_buku'],
+        "judul" => $row['judul'],
+        "tahun_terbit" => $row['tahun_terbit'],
+        "cover" => "http://localhost/perpus-uts/uploads/buku/" . $row['cover_buku']
+    ];
+}
+
+response("success", "Daftar buku ditemukan", $buku_list);
